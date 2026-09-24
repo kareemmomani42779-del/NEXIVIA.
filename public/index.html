@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEXIVA</title>
+<style>
+:root{--bg:#f5f7ff;--card:#fff;--text:#182033;--muted:#6d7485;--primary:#635bff;--secondary:#22c55e;--pink:#ff5ca8;--yellow:#ffbd2e;--blue:#3b82f6;--border:#e7e9f2}
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button{font:inherit;border:0;cursor:pointer}.app{display:flex;min-height:100vh}.sidebar{width:245px;background:#171a2b;color:#fff;padding:22px 16px;position:fixed;right:0;top:0;bottom:0;z-index:10}.brand{font-size:23px;font-weight:800;padding:8px 10px 25px}.brand span{color:#8b83ff}.nav button{width:100%;background:transparent;color:#cbd0e2;text-align:right;padding:13px 14px;border-radius:12px;margin:3px 0}.nav button.active,.nav button:hover{background:#292d46;color:#fff}.main{margin-right:245px;width:calc(100% - 245px);padding:24px 30px 40px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.top h1{margin:0;font-size:27px}.user-chip{background:#fff;padding:9px 14px;border-radius:14px;border:1px solid var(--border);font-weight:700}.hero{background:linear-gradient(135deg,#635bff,#8c7cff);color:#fff;border-radius:24px;padding:27px;display:flex;justify-content:space-between;gap:20px;align-items:center;box-shadow:0 12px 30px #635bff25}.hero h2{font-size:28px;margin:0 0 8px}.hero p{margin:0;opacity:.9}.hero .orb{font-size:65px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin:20px 0}.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px}.stat strong{font-size:25px;display:block;margin-top:5px}.muted{color:var(--muted);font-size:13px}.subject{min-height:145px;display:flex;flex-direction:column;justify-content:space-between}.subject .icon{font-size:35px}.subject h3{margin:8px 0}.progress{height:9px;background:#edf0f7;border-radius:20px;overflow:hidden}.progress i{display:block;height:100%;background:var(--primary);border-radius:20px}.section{margin-top:24px}.section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.section-title h2{margin:0}.btn{background:var(--primary);color:#fff;border-radius:11px;padding:10px 15px;font-weight:700}.btn.secondary{background:#eef0ff;color:var(--primary)}.btn.green{background:var(--secondary)}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.teacher{display:flex;align-items:center;gap:14px}.avatar{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;font-size:30px;background:#eef0ff}.teacher h3{margin:0 0 5px}.page{display:none}.page.active{display:block}.back{margin-bottom:15px}.list{display:grid;gap:12px}.lesson{display:flex;justify-content:space-between;align-items:center}.quiz-option{width:100%;padding:13px;margin:7px 0;border:2px solid var(--border);border-radius:12px;background:#fff;text-align:right}.quiz-option.correct{border-color:#22c55e;background:#ecfdf3}.quiz-option.wrong{border-color:#ef4444;background:#fef2f2}.chat{max-width:850px;margin:auto}.messages{height:430px;overflow:auto;background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px}.msg{padding:11px 14px;border-radius:14px;max-width:75%;margin:8px 0;line-height:1.7}.bot{background:#eef0ff;margin-left:auto}.me{background:#f1f3f7;margin-right:auto}.composer{display:flex;gap:8px;margin-top:10px}.composer input{flex:1;border:1px solid var(--border);border-radius:12px;padding:13px}.shop{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.price{font-size:24px;font-weight:800;color:var(--primary)}.badge{display:inline-block;padding:6px 10px;border-radius:20px;background:#fff3cd;margin:4px}.profile{max-width:800px}.profile-head{display:flex;align-items:center;gap:20px}.big-avatar{width:90px;height:90px;border-radius:25px;background:#e8e7ff;display:grid;place-items:center;font-size:45px}.toast{position:fixed;bottom:25px;left:25px;background:#171a2b;color:#fff;padding:13px 18px;border-radius:12px;display:none;z-index:99}.mobile-nav{display:none}
+@media(max-width:850px){.sidebar{display:none}.main{margin:0;width:100%;padding:18px 14px 85px}.grid{grid-template-columns:repeat(2,1fr)}.cards,.shop{grid-template-columns:1fr}.hero{padding:20px}.hero .orb{font-size:45px}.mobile-nav{display:flex;position:fixed;bottom:0;right:0;left:0;background:#171a2b;z-index:20;justify-content:space-around;padding:9px}.mobile-nav button{background:transparent;color:#fff;font-size:12px}.mobile-nav span{display:block;font-size:20px}}
+</style>
+
+<style>
+.auth-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#171a2b,#635bff);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
+.auth-card{width:min(430px,100%);background:#fff;border-radius:25px;padding:30px;box-shadow:0 25px 70px #0005}
+.auth-logo{font-size:28px;font-weight:900;text-align:center;margin-bottom:6px}.auth-logo span{color:#635bff}
+.auth-card h2{text-align:center;margin:8px 0}.auth-card p{text-align:center;color:#6d7485}
+.auth-card input{width:100%;padding:13px;margin:7px 0;border:1px solid #e1e4ed;border-radius:12px;font:inherit}
+.auth-tabs{display:flex;gap:8px;margin:18px 0}.auth-tabs button{flex:1;padding:10px;border-radius:10px;background:#f0f1f7}.auth-tabs button.active{background:#635bff;color:#fff}
+.auth-error{color:#ef4444;font-size:13px;min-height:20px;margin-top:4px}
+.account-menu{position:absolute;top:58px;left:0;background:#fff;border:1px solid #e7e9f2;border-radius:14px;padding:8px;box-shadow:0 12px 30px #0002;display:none;min-width:160px;z-index:30}
+.account-menu button{display:block;width:100%;background:#fff;padding:10px;text-align:right;border-radius:9px}.account-menu button:hover{background:#f1f2f8}
+.user-wrap{position:relative}
+</style>
+</head>
+<body>
+<div id="authOverlay" class="auth-overlay">
+  <div class="auth-card">
+    <div class="auth-logo">NEXIVA <span>LEARN_APP</span></div>
+    <p>منصة التعلم الذكية للطلاب</p>
+    <div class="auth-tabs">
+      <button id="loginTab" class="active" onclick="switchAuth('login')">تسجيل الدخول</button>
+      <button id="registerTab" onclick="switchAuth('register')">إنشاء حساب</button>
+    </div>
+    <h2 id="authTitle">أهلًا بعودتك 👋</h2>
+    <div id="nameField" style="display:none">
+      <input id="authName" placeholder="اسم الطالب">
+      <select id="authGender" style="width:100%;padding:13px;margin:7px 0;border:1px solid #e1e4ed;border-radius:12px;font:inherit">
+        <option value="">اختاري الجنس</option>
+        <option value="female">أنثى</option>
+        <option value="male">ذكر</option>
+      </select>
+    </div>
+    <input id="authEmail" type="email" placeholder="البريد الإلكتروني">
+    <input id="authPassword" type="password" placeholder="كلمة المرور">
+    <div id="authError" class="auth-error"></div>
+    <button class="btn" style="width:100%;margin-top:5px" onclick="submitAuth()" id="authSubmit">دخول</button>
+  </div>
+</div>
+
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">NEXIVA <span>LEARN_APP</span></div>
+  <div class="nav">
+    <button class="active" data-page="home">🏠 الرئيسية</button>
+    <button data-page="teachers">🤖 المدرسون AI</button>
+    <button data-page="quizzes">📝 الاختبارات</button>
+    <button data-page="points">⭐ النقاط والمستويات</button>
+    <button data-page="shop">🛒 المتجر</button>
+    <button data-page="premium">🎁 المحتوى المميز</button>
+    <button data-page="profile">👤 ملفي</button>
+  </div>
+</aside>
+<main class="main">
+  <div class="top"><h1 id="pageTitle">الرئيسية</h1>
+<div class="user-wrap">
+  <button class="user-chip" id="headerChip" onclick="toggleAccount()">👩🏻‍🎓 <span id="headerName">الطالب</span> · <span id="levelChip">المستوى 7</span></button>
+  <div id="accountMenu" class="account-menu">
+    <button onclick="showPage('profile');toggleAccount()">👤 ملفي</button><button onclick="openProfileEditor()">⚙️ تعديل الملف الشخصي</button>
+    <button onclick="logout()">🚪 تسجيل الخروج</button>
+  </div>
+</div></div>
+
+  <section id="home" class="page active">
+    <div class="hero"><div><h2>أهلًا الطالب! 👋</h2><p>جاهزة نكمل رحلة التعلم اليوم؟</p><button class="btn" style="margin-top:18px" onclick="showPage('teachers')">ابدئي التعلم</button></div><div class="orb">🚀</div></div>
+    <div class="grid">
+      <div class="card stat">⭐ XP الحالي<strong id="xp">1240</strong><span class="muted">+120 هذا الأسبوع</span></div>
+      <div class="card stat">🏆 المستوى<strong>7</strong><span class="muted">260 XP للمستوى التالي</span></div>
+      <div class="card stat">🔥 سلسلة التعلم<strong>6 أيام</strong><span class="muted">استمري!</span></div>
+      <div class="card stat">🎯 التقدم<strong>74%</strong><span class="muted">هذا الشهر</span></div>
+    </div>
+    <div class="section"><div class="section-title"><h2>المواد</h2></div><div class="cards">
+      <div class="card subject"><div><div class="icon">🇬🇧</div><h3>English</h3><span class="muted">محادثة وقواعد ومفردات</span></div><div><div class="progress"><i style="width:78%"></i></div><small>78%</small></div></div>
+      <div class="card subject"><div><div class="icon">➗</div><h3>رياضيات</h3><span class="muted">جبر، هندسة وحساب</span></div><div><div class="progress"><i style="width:61%"></i></div><small>61%</small></div></div>
+      <div class="card subject"><div><div class="icon">🔬</div><h3>علوم</h3><span class="muted">أحياء وكيمياء وفيزياء</span></div><div><div class="progress"><i style="width:70%"></i></div><small>70%</small></div></div>
+      <div class="card subject"><div><div class="icon">🇸🇦</div><h3>عربي</h3><span class="muted">لغة ونحو وقراءة</span></div><div><div class="progress"><i style="width:55%"></i></div><small>55%</small></div></div>
+    </div></div>
+    <div class="section"><div class="section-title"><h2>آخر درس</h2><button class="btn secondary" onclick="showPage('teachers')">متابعة</button></div><div class="card lesson"><div><b>English · Present Perfect</b><div class="muted">آخر مشاهدة منذ 20 دقيقة</div></div><span>▶️</span></div></div>
+  </section>
+
+  <section id="teachers" class="page">
+    <div class="section-title"><h2>اختاري مدرسك بالذكاء الاصطناعي</h2></div>
+    <div class="cards">
+      <div class="card teacher"><div class="avatar">👩🏻‍🏫</div><div><h3>Lina · English</h3><div class="muted">مرحة وتحب المحادثة</div><button class="btn" onclick="openChat('Lina','English')">تحدثي معها</button></div></div>
+      <div class="card teacher"><div class="avatar">👨🏻‍🏫</div><div><h3>Omar · Math</h3><div class="muted">يشرح خطوة بخطوة</div><button class="btn" onclick="openChat('Omar','رياضيات')">تحدثي معه</button></div></div>
+      <div class="card teacher"><div class="avatar">👩🏻‍🔬</div><div><h3>Nova · Science</h3><div class="muted">تحول المفاهيم إلى أمثلة</div><button class="btn" onclick="openChat('Nova','علوم')">تحدثي معها</button></div></div>
+      <div class="card teacher"><div class="avatar">👨🏻‍💼</div><div><h3>ياسر · عربي</h3><div class="muted">قواعد وقراءة بطريقة بسيطة</div><button class="btn" onclick="openChat('ياسر','عربي')">تحدثي معه</button></div></div>
+    </div>
+    <div id="chatBox" class="chat" style="display:none;margin-top:20px">
+      <div class="card"><b id="chatName">المدرس</b><span class="muted" id="chatSubject"></span><span id="chatGenderMode" class="badge" style="margin-right:8px"></span></div>
+      <div class="messages" id="messages"><div class="msg bot">أهلًا! أنا مدرسك الذكي. اطرحي أي سؤال وسأساعدك 😊</div></div>
+      <div class="composer"><input id="chatInput" placeholder="اكتبي سؤالك هنا..." onkeydown="if(event.key==='Enter')sendMsg()">
+<div id="nxVoiceControls" style="display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap">
+  <button type="button" onclick="startVoiceInput()">🎙️ تحدث مع AI</button>
+  <button type="button" onclick="stopVoiceInput()">⏹️ إيقاف</button>
+  <label style="font-size:13px"><input id="autoSpeak" type="checkbox" checked> 🔊 اقرأ رد AI بصوت</label>
+  <span id="voiceStatus" style="font-size:12px;opacity:.75"></span>
+</div>
+<button class="btn" onclick="sendMsg()">إرسال</button><button class="btn secondary" onclick="voiceDemo()">🎙️</button></div>
+    </div>
+  </section>
+
+  <section id="quizzes" class="page">
+    <div class="cards">
+      <div class="card"><h3>🇬🇧 English</h3><p class="muted">Present Perfect</p><button class="btn" onclick="startQuiz()">ابدئي الاختبار</button></div>
+      <div class="card"><h3>➗ رياضيات</h3><p class="muted">الجبر</p><button class="btn secondary" onclick="toast('سيتم فتح الاختبار قريبًا')">اختبار متوسط</button></div>
+      <div class="card"><h3>🔬 علوم</h3><p class="muted">الخلايا</p><button class="btn secondary" onclick="toast('سيتم فتح الاختبار قريبًا')">اختبار سهل</button></div>
+    </div>
+    <div id="quizArea" style="margin-top:20px"></div>
+  </section>
+
+  <section id="points" class="page">
+    <div class="hero"><div><h2>مستواك 7 🚀</h2><p>1240 XP من أصل 1500 للمستوى القادم</p><div class="progress" style="margin-top:15px;background:#ffffff55"><i style="width:83%;background:#fff"></i></div></div><div class="orb">🏆</div></div>
+    <div class="section"><h2>الشارات</h2><div class="card"><span class="badge">🔥 7 أيام متتالية</span><span class="badge">🧠 أول اختبار</span><span class="badge">⭐ 1000 XP</span><span class="badge">🎯 10 إجابات صحيحة</span></div></div>
+    <div class="section"><h2>التحدي اليومي</h2><div class="card"><b>حلّي 5 أسئلة اليوم</b><p class="muted">+50 XP عند الإنجاز</p><button class="btn green" onclick="addXP(50)">إنجاز التحدي</button></div></div>
+  </section>
+
+  <section id="shop" class="page">
+    <div class="shop">
+      <div class="card"><h3>📚 حزمة English Plus</h3><p class="muted">30 درسًا + 5 اختبارات</p><div class="price">4.99 JD</div><button class="btn" onclick="buy('حزمة English Plus')">شراء</button></div>
+      <div class="card"><h3>🧠 10 اختبارات إضافية</h3><p class="muted">اختبارات متقدمة مع شرح</p><div class="price">2.49 JD</div><button class="btn" onclick="buy('10 اختبارات إضافية')">شراء</button></div>
+      <div class="card"><h3>🚀 Nova Premium</h3><p class="muted">محتوى مميز + مزايا إضافية</p><div class="price">7.99 JD</div><button class="btn" onclick="buy('Nova Premium')">شراء</button></div>
+    </div>
+  </section>
+
+  <section id="premium" class="page">
+    <div class="hero"><div><h2>🎁 NEXIVA Premium</h2><p>افتحي محتوى متقدم وتجربة تعليمية أوسع.</p><button class="btn" onclick="showPage('shop')">عرض الباقات</button></div><div class="orb">✨</div></div>
+    <div class="cards" style="margin-top:20px"><div class="card"><h3>📖 حزم خاصة</h3><p class="muted">محتوى إضافي لكل مادة</p></div><div class="card"><h3>📝 اختبارات متقدمة</h3><p class="muted">أسئلة أعلى تحديًا مع شرح</p></div><div class="card"><h3>🤖 AI متقدم</h3><p class="muted">مساعدة شخصية في التعلم</p></div></div>
+  </section>
+
+  <section id="profile" class="page">
+    <div class="card profile">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+      <button class="btn" onclick="openProfileEditor()">⚙️ تعديل البيانات</button>
+    </div>
+    <div class="profile-head"><div class="big-avatar" id="profileAvatar">👩🏻‍🎓</div><div><h2 id="profileName">الطالب</h2><p class="muted">المستوى 7 · 1240 XP</p><p class="muted">الجنس: <b id="profileGender">غير محدد</b></p></div></div>
+    <div class="section"><h3>إنجازاتي</h3><span class="badge">🔥 سلسلة 6 أيام</span><span class="badge">🏆 المستوى 7</span><span class="badge">🧠 متعلمة نشيطة</span></div>
+    <div class="section"><h3>تقدمي في المواد</h3><p>🇬🇧 English</p><div class="progress"><i style="width:78%"></i></div><p>➗ رياضيات</p><div class="progress"><i style="width:61%"></i></div><p>🔬 علوم</p><div class="progress"><i style="width:70%"></i></div><p>🇸🇦 عربي</p><div class="progress"><i style="width:55%"></i></div></div>
+    </div>
+  </section>
+</main>
+</div>
+<div class="mobile-nav"><button onclick="showPage('home')">🏠<span>الرئيسية</span></button><button onclick="showPage('teachers')">🤖<span>AI</span></button><button onclick="showPage('quizzes')">📝<span>اختبارات</span></button><button onclick="showPage('shop')">🛒<span>المتجر</span></button><button onclick="showPage('profile')">👤<span>ملفي</span></button></div>
+
+<div id="profileModal" class="auth-overlay" style="display:none;background:#171a2bcc">
+  <div class="auth-card">
+    <h2>تعديل الملف الشخصي</h2>
+    <p>عدّل بياناتك في أي وقت.</p>
+    <input id="editName" placeholder="الاسم">
+    <select id="editGender" style="width:100%;padding:13px;margin:7px 0;border:1px solid #e1e4ed;border-radius:12px;font:inherit">
+      <option value="">غير محدد</option>
+      <option value="female">أنثى</option>
+      <option value="male">ذكر</option>
+    </select>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn" style="flex:1" onclick="saveProfile()">حفظ</button>
+      <button class="btn secondary" style="flex:1" onclick="closeProfileEditor()">إلغاء</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+
+
+
+
+<script>
+/* NEXIVA — complete gender-aware interface */
+window.NXG = {
+  originals: new WeakMap(),
+
+  user() {
+    try {
+      const users = JSON.parse(localStorage.getItem("nova_users") || "{}");
+      const email = localStorage.getItem("nova_current");
+      return (email && users[email]) ? users[email] : {};
+    } catch (e) { return {}; }
+  },
+
+  gender() {
+    const g = this.user().gender;
+    return g === "female" ? "female" : g === "male" ? "male" : "neutral";
+  },
+
+  render(text) {
+    const g = this.gender();
+    if (g === "female") {
+      return text
+        .replace(/أهلًا الطالب/g, "أهلًا فيكِ")
+        .replace(/جاهزة نكمل رحلة التعلم اليوم؟/g, "جاهزة نكمل رحلة التعلم اليوم؟")
+        .replace(/ابدئي التعلم/g, "ابدئي التعلم")
+        .replace(/استمري!/g, "استمري!")
+        .replace(/اختاري مدرسك بالذكاء الاصطناعي/g, "اختاري مدرسكِ بالذكاء الاصطناعي")
+        .replace(/تحدثي معه/g, "تحدثي معه")
+        .replace(/تحدثي معها/g, "تحدثي معها")
+        .replace(/ابدئي الاختبار/g, "ابدئي الاختبار")
+        .replace(/حلّي 5 أسئلة اليوم/g, "حلّي 5 أسئلة اليوم")
+        .replace(/افتحي محتوى متقدم/g, "افتحي محتوى متقدم")
+        .replace(/محتوى مميز/g, "محتوى مميز")
+        .replace(/متعلمة نشيطة/g, "متعلمة نشيطة")
+        .replace(/راجعي استخدام/g, "راجعي استخدام")
+        .replace(/حاولي مرة أخرى/g, "حاولي مرة أخرى")
+        .replace(/اكتبي سؤالك/g, "اكتبي سؤالك")
+        .replace(/اكتبي إجابتك/g, "اكتبي إجابتك")
+        .replace(/نقاطك/g, "نقاطكِ")
+        .replace(/مستواك/g, "مستواكِ")
+        .replace(/تقدّمك/g, "تقدّمكِ")
+        .replace(/دروسك/g, "دروسكِ")
+        .replace(/إنجازاتك/g, "إنجازاتكِ")
+        .replace(/ملفك الشخصي/g, "ملفكِ الشخصي")
+        .replace(/سؤالك/g, "سؤالكِ")
+        .replace(/إجابتك/g, "إجابتكِ")
+        .replace(/معك/g, "معكِ");
+    }
+    if (g === "male") {
+      return text
+        .replace(/أهلًا الطالب/g, "أهلًا فيك")
+        .replace(/جاهزة نكمل رحلة التعلم اليوم؟/g, "جاهز نكمل رحلة التعلم اليوم؟")
+        .replace(/ابدئي التعلم/g, "ابدأ التعلم")
+        .replace(/استمري!/g, "استمر!")
+        .replace(/اختاري مدرسك بالذكاء الاصطناعي/g, "اختر مدرسك بالذكاء الاصطناعي")
+        .replace(/تحدثي معه/g, "تحدث معه")
+        .replace(/تحدثي معها/g, "تحدث معها")
+        .replace(/ابدئي الاختبار/g, "ابدأ الاختبار")
+        .replace(/حلّي 5 أسئلة اليوم/g, "حل 5 أسئلة اليوم")
+        .replace(/افتحي محتوى متقدم/g, "افتح محتوى متقدم")
+        .replace(/متعلمة نشيطة/g, "متعلم نشيط")
+        .replace(/راجعي استخدام/g, "راجع استخدام")
+        .replace(/حاولي مرة أخرى/g, "حاول مرة أخرى")
+        .replace(/اكتبي سؤالك/g, "اكتب سؤالك")
+        .replace(/اكتبي إجابتك/g, "اكتب إجابتك")
+        .replace(/نقاطكِ/g, "نقاطك")
+        .replace(/مستواكِ/g, "مستواك")
+        .replace(/تقدّمكِ/g, "تقدّمك")
+        .replace(/دروسكِ/g, "دروسك")
+        .replace(/إنجازاتكِ/g, "إنجازاتك")
+        .replace(/ملفكِ الشخصي/g, "ملفك الشخصي")
+        .replace(/سؤالكِ/g, "سؤالك")
+        .replace(/إجابتكِ/g, "إجابتك")
+        .replace(/معكِ/g, "معك")
+        .replace(/أنتِ/g, "أنت")
+        .replace(/جاهزة/g, "جاهز");
+    }
+    // Neutral: keep the app's original wording except for the fixed student label.
+    return text.replace(/أهلًا الطالب/g, "أهلًا بك");
+  },
+
+  apply() {
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+
+    for (const node of nodes) {
+      if (node.parentElement && ["SCRIPT", "STYLE"].includes(node.parentElement.tagName)) continue;
+      if (!this.originals.has(node)) this.originals.set(node, node.nodeValue);
+      node.nodeValue = this.render(this.originals.get(node));
+    }
+
+    const input = document.getElementById("chatInput");
+    if (input) {
+      input.placeholder = this.gender() === "female"
+        ? "اكتبي سؤالكِ هنا..."
+        : this.gender() === "male"
+        ? "اكتب سؤالك هنا..."
+        : "اكتب سؤالك هنا...";
+    }
+
+    const mode = document.getElementById("chatGenderMode");
+    if (mode) {
+      mode.textContent = this.gender() === "female"
+        ? "يتحدث معكِ بصيغة المؤنث"
+        : this.gender() === "male"
+        ? "يتحدث معك بصيغة المذكر"
+        : "صيغة محايدة";
+    }
+
+    const user = this.user();
+    const profileGender = document.getElementById("profileGender");
+    if (profileGender) {
+      profileGender.textContent =
+        user.gender === "female" ? "أنثى" :
+        user.gender === "male" ? "ذكر" : "غير محدد";
+    }
+  }
+};
+</script>
+
+<script>
+let authMode='login';
+function getUsers(){try{return JSON.parse(localStorage.getItem('nova_users')||'{}')}catch(e){return {}}}
+function saveUsers(u){localStorage.setItem('nova_users',JSON.stringify(u))}
+function getCurrent(){return localStorage.getItem('nova_current')}
+function switchAuth(mode){
+  authMode=mode;
+  document.getElementById('loginTab').classList.toggle('active',mode==='login');
+  document.getElementById('registerTab').classList.toggle('active',mode==='register');
+  document.getElementById('nameField').style.display=mode==='register'?'block':'none';
+  document.getElementById('authTitle').textContent=mode==='register'?'أنشئي حسابك 🚀':'أهلًا بعودتك 👋';
+  document.getElementById('authSubmit').textContent=mode==='register'?'إنشاء الحساب':'دخول';
+  document.getElementById('authError').textContent='';
+}
+function submitAuth(){
+  const email=document.getElementById('authEmail').value.trim().toLowerCase();
+  const password=document.getElementById('authPassword').value;
+  const name=document.getElementById('authName').value.trim();
+  const err=document.getElementById('authError');
+  const gender=document.getElementById('authGender').value; if(!email||!password||(authMode==='register'&&(!name||!gender))){err.textContent='يرجى تعبئة جميع الحقول واختيار الجنس.';return}
+  const users=getUsers();
+  if(authMode==='register'){
+    if(users[email]){err.textContent='هذا البريد مسجل مسبقًا. سجلي الدخول.';return}
+    users[email]={name,password,gender,xp:0,level:1,createdAt:new Date().toISOString()};
+    saveUsers(users);
+  }else{
+    if(!users[email]||users[email].password!==password){err.textContent='البريد الإلكتروني أو كلمة المرور غير صحيحة.';return}
+  }
+  localStorage.setItem('nova_current',email);
+  applyAccount();
+}
+function applyAccount(){
+  const email=getCurrent(),users=getUsers(),u=users[email];
+  if(!u){document.getElementById('authOverlay').style.display='flex';return}
+  document.getElementById('authOverlay').style.display='none';
+  document.getElementById('headerName').textContent=u.name; const hc=document.getElementById('headerChip'); if(hc) hc.firstChild.textContent=(u.gender==='male'?'👨🏻‍🎓 ':u.gender==='female'?'👩🏻‍🎓 ':'🧑🏻‍🎓 ');
+  document.getElementById('profileName').textContent=u.name;
+  const pg=document.getElementById('profileGender');
+  if(pg) pg.textContent=u.gender==='female'?'أنثى':u.gender==='male'?'ذكر':'غير محدد'; const pa=document.getElementById('profileAvatar'); if(pa) pa.textContent=u.gender==='male'?'👨🏻‍🎓':u.gender==='female'?'👩🏻‍🎓':'🧑🏻‍🎓';
+  const greeting=document.getElementById('homeGreeting');
+  if(greeting){
+    const g=u.gender;
+    greeting.textContent=(g==='female'?'أهلًا ':'أهلًا ')+u.name+'! 👋';
+  }
+  const genderEl=document.getElementById('authGender');
+  if(genderEl && u.gender) genderEl.value=u.gender;
+  if(typeof XP!=='undefined'){XP=u.xp||0;document.getElementById('xp').textContent=XP}
+  document.getElementById('levelChip').textContent='المستوى '+(u.level||1); setTimeout(()=>window.NXG?.apply(),20);
+}
+function openProfileEditor(){
+  const email=getCurrent(), users=getUsers(), u=users[email];
+  if(!u)return;
+  document.getElementById('editName').value=u.name||'';
+  document.getElementById('editGender').value=u.gender||'female';
+  document.getElementById('profileModal').style.display='flex';
+}
+function closeProfileEditor(){document.getElementById('profileModal').style.display='none'}
+function saveProfile(){
+  const email=getCurrent(), users=getUsers(), u=users[email];
+  if(!u)return;
+  const name=document.getElementById('editName').value.trim();
+  const gender=document.getElementById('editGender').value || '';
+  if(!name){toast('اكتب اسمك أولًا');return}
+  u.name=name; u.gender=gender;
+  users[email]=u; saveUsers(users); applyAccount(); setTimeout(()=>window.NXG?.apply(),20); closeProfileEditor();
+  toast('تم تحديث الملف الشخصي بنجاح');
+}
+function logout(){localStorage.removeItem('nova_current');location.reload()}
+function toggleAccount(){let x=document.getElementById('accountMenu');x.style.display=x.style.display==='block'?'none':'block'}
+document.addEventListener('DOMContentLoaded',applyAccount);
+</script>
+
+<script>
+let XP=1240,currentTeacher='';
+const titles={home:'الرئيسية',teachers:'المدرسون بالذكاء الاصطناعي',quizzes:'الاختبارات',points:'النقاط والمستويات',shop:'المتجر',premium:'المحتوى المميز',profile:'ملفي'};
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.getElementById('pageTitle').textContent=titles[id];document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));scrollTo(0,0)}
+function toast(t){let x=document.getElementById('toast');x.textContent=t;x.style.display='block';setTimeout(()=>x.style.display='none',2200)}
+function addXP(n){
+ XP+=n; document.getElementById('xp').textContent=XP;
+ const email=getCurrent(), users=getUsers();
+ if(email && users[email]){users[email].xp=XP;users[email].level=Math.max(1,Math.floor(XP/200)+1);saveUsers(users);applyAccount()}
+ toast('🎉 +'+n+' XP!');
+}
+
+function getStudentContext(){
+  const email=getCurrent(), users=getUsers(), u=users[email]||{};
+  return {
+    name:u.name||'الطالب',
+    gender:u.gender||'unspecified',
+    language:'ar',
+    instruction:u.gender==='female'
+      ? 'خاطب الطالبة بالمؤنث في كل الرد: أنتِ، لكِ، معكِ، اكتبي، اختاري، حاولي، جاهزة، حابة. لا تستخدم المذكر.'
+      : u.gender==='male'
+      ? 'خاطب الطالب بالمذكر في كل الرد: أنت، لك، معك، اكتب، اختر، حاول، جاهز، حاب. لا تستخدم المؤنث.'
+      : 'استخدم صيغة عربية محايدة قدر الإمكان.'
+  };
+}
+
+function openChat(name,subject){
+  currentTeacher=name;
+  document.getElementById('chatBox').style.display='block';
+  document.getElementById('chatName').textContent=name+' · ';
+  document.getElementById('chatSubject').textContent=subject;
+
+  const ctx=getStudentContext();
+  const n=ctx.name||'الطالب';
+  const f=ctx.gender==='female', m=ctx.gender==='male';
+  const mode=document.getElementById('chatGenderMode');
+  if(mode) mode.textContent=f?'يتحدث معكِ بصيغة المؤنث':m?'يتحدث معك بصيغة المذكر':'صيغة محايدة';
+
+  const greeting=f
+    ? `أهلًا فيكِ يا ${n}! أنا جاهزة أساعدكِ في ${subject}. شو حابة نبدأ؟`
+    : m
+    ? `أهلًا فيك يا ${n}! أنا جاهز أساعدك في ${subject}. شو حاب نبدأ؟`
+    : `أهلًا فيك يا ${n}! أنا جاهز أساعدك في ${subject}. شو حاب نبدأ؟`;
+
+  document.getElementById('messages').innerHTML='<div class="msg bot">'+escapeHtml(greeting)+'</div>';
+  setTimeout(()=>window.NXG?.apply(),20);
+  document.getElementById('chatInput').focus();
+}
+
+
+async function sendMsg(){
+  const input=document.getElementById('chatInput');
+  const text=input?.value.trim();
+  if(!text) return;
+
+  const box=document.getElementById('messages');
+  box.innerHTML += '<div class="msg me">'+escapeHtml(text)+'</div>';
+  input.value='';
+  box.innerHTML += '<div class="msg bot" id="nxTyping">يكتب الآن…</div>';
+  box.scrollTop=box.scrollHeight;
+
+  const ctx=getStudentContext();
+  try{
+    const response=await fetch('/api/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        message:text,
+        teacher:currentTeacher,
+        subject:document.getElementById('chatSubject')?.textContent||'',
+        student:ctx
+      })
+    });
+    const data=await response.json();
+    document.getElementById('nxTyping')?.remove();
+    if(!response.ok) throw new Error(data.error||'AI error');
+
+    const answer=data.reply||'لم أستطع تكوين رد الآن.';
+    box.innerHTML += '<div class="msg bot">'+escapeHtml(answer).replace(/\n/g,'<br>')+'</div>';
+    box.scrollTop=box.scrollHeight;
+
+    if(document.getElementById('autoSpeak')?.checked) speakAI(answer);
+  }catch(error){
+    document.getElementById('nxTyping')?.remove();
+    box.innerHTML += '<div class="msg bot">تعذر الاتصال بالـAI. تأكد من تشغيل الخادم وإعداد مفتاح OpenAI.</div>';
+    console.error(error);
+  }
+}
+
+function voiceDemo(){toast('🎙️ واجهة المحادثة الصوتية جاهزة للربط بخدمة Speech-to-Text وText-to-Speech')}
+function startQuiz(){let a=document.getElementById('quizArea');a.innerHTML='<div class="card"><h2>🇬🇧 English · مستوى متوسط</h2><p>Choose the correct answer:</p><b>She ___ finished her homework.</b><button class="quiz-option" onclick="answer(this,false)">has</button><button class="quiz-option" onclick="answer(this,true)">has</button><button class="quiz-option" onclick="answer(this,false)">have</button><button class="quiz-option" onclick="answer(this,false)">having</button><div id="quizResult"></div></div>'}
+function answer(btn,correct){document.querySelectorAll('.quiz-option').forEach(x=>x.disabled=true);btn.classList.add(correct?'correct':'wrong');document.getElementById('quizResult').innerHTML='<p><b>'+ (correct?'✅ إجابة صحيحة! +20 XP':'❌ ليست الإجابة المطلوبة. راجعي استخدام has مع She.')+'</b></p>';if(correct)addXP(20)}
+function buy(name){toast('🛒 تم اختيار '+name+' — صفحة الدفع جاهزة للربط ببوابة دفع حقيقية.')}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+</script>
+
+<script>
+let nxRecognition=null;
+function startVoiceInput(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const status=document.getElementById("voiceStatus");
+  if(!SR){
+    if(status) status.textContent="المتصفح لا يدعم الإدخال الصوتي المباشر.";
+    return;
+  }
+  if(nxRecognition) nxRecognition.stop();
+  nxRecognition=new SR();
+  nxRecognition.lang="ar-JO";
+  nxRecognition.interimResults=true;
+  nxRecognition.continuous=false;
+  nxRecognition.onstart=()=>{if(status)status.textContent="أسمعك الآن…";};
+  nxRecognition.onresult=(e)=>{
+    let finalText="";
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal) finalText+=e.results[i][0].transcript;
+    }
+    if(finalText){
+      const input=document.getElementById("chatInput");
+      input.value=finalText;
+      sendMsg();
+    }
+  };
+  nxRecognition.onerror=()=>{if(status)status.textContent="تعذر التقاط الصوت.";};
+  nxRecognition.onend=()=>{if(status)status.textContent="";};
+  nxRecognition.start();
+}
+function stopVoiceInput(){ if(nxRecognition) nxRecognition.stop(); }
+function speakAI(text){
+  if(!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="ar-JO";
+  u.rate=.95;
+  speechSynthesis.speak(u);
+}
+</script>
+
+
+<script>
+(function(){
+  let timer=null, running=false;
+  function refresh(){
+    if(running || !window.NXG) return;
+    running=true;
+    try{ NXG.apply(); } finally { setTimeout(()=>running=false,0); }
+  }
+  document.addEventListener('DOMContentLoaded',()=>setTimeout(refresh,80));
+  window.addEventListener('storage',()=>setTimeout(refresh,20));
+  window.addEventListener('load',()=>{
+    const observer=new MutationObserver(()=>{
+      clearTimeout(timer);
+      timer=setTimeout(refresh,30);
+    });
+    observer.observe(document.body,{childList:true,subtree:true});
+  });
+})();
+</script>
+
+</body>
+</html>
